@@ -7,8 +7,8 @@
 ## 技术架构
 
 ### 核心框架
-- **Spring Boot 3.1.x** - 微服务框架
-- **Spring Cloud Alibaba 2022.0.x** - 微服务治理
+- **Spring Boot 3.2.0** - 微服务框架
+- **Spring Cloud Alibaba 2023.0.1.0** - 微服务治理
 - **Nacos** - 服务注册发现与配置中心
 - **Sentinel** - 流量控制与熔断降级
 - **RocketMQ** - 消息队列
