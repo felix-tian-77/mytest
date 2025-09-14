@@ -50,6 +50,7 @@ data-platform/
 - JDK 17+
 - Maven 3.8+
 - Docker & Docker Compose
+- Git 2.0+
 - Kubernetes (生产环境)
 
 ### 本地开发
