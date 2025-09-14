@@ -1,0 +1,84 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: data-platform-gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        namespace: dev
+      config:
+        server-addr: localhost:8848
+        namespace: dev
+        file-extension: yml
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        # 数据接入服务
+        - id: data-ingestion
+          uri: lb://data-platform-ingestion
+          predicates:
+            - Path=/ingestion/**
+          filters:
+            - StripPrefix=1
+        # 数据处理服务
+        - id: data-processing
+          uri: lb://data-platform-processing
+          predicates:
+            - Path=/processing/**
+          filters:
+            - StripPrefix=1
+        # 数据服务
+        - id: data-service
+          uri: lb://data-platform-service
+          predicates:
+            - Path=/service/**
+          filters:
+            - StripPrefix=1
+        # 数据应用
+        - id: data-application
+          uri: lb://data-platform-application
+          predicates:
+            - Path=/application/**
+          filters:
+            - StripPrefix=1
+        # 系统管理
+        - id: data-management
+          uri: lb://data-platform-management
+          predicates:
+            - Path=/management/**
+          filters:
+            - StripPrefix=1
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+
+# Sentinel配置
+spring.cloud.sentinel:
+  transport:
+    dashboard: localhost:8858
+    port: 8719
+  datasource:
+    ds1:
+      nacos:
+        server-addr: localhost:8848
+        dataId: gateway-flow-rules
+        groupId: SENTINEL_GROUP
+        rule-type: flow
+
+# 日志配置
+logging:
+  level:
+    com.dataplatform: debug
+    org.springframework.cloud.gateway: debug
